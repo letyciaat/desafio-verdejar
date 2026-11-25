@@ -27,3 +27,16 @@ FROM pedidos
 JOIN clientes ON clientes.id = pedidos.cliente_id
 GROUP BY clientes.estado
 ORDER BY quantidade_pedidos DESC;
+
+
+-- 3. pedidos divergentes - valor_total diferente da soma dos itens
+SELECT id,
+       valor_total,
+       valor_itens,
+       ROUND(valor_total - valor_itens, 2) AS diferenca
+FROM pedidos
+WHERE divergente = 1
+ORDER BY id;
+
+-- quantidade de pedidos divergentes
+SELECT COUNT(*) AS total_divergentes FROM pedidos WHERE divergente = 1;
