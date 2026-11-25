@@ -21,7 +21,7 @@ def buscar_pagina(endereco):
         print(f"error: não foi possível conectar a API na rota{endereco}")
         return None
 
-# 3 - função que percorre todas as páginas de uma rota;
+# 3 - função que percorre todas as páginas de uma rota
 def extrair(rota):
 
     # 3.1 - montando endereço da página 1 de registros
@@ -71,6 +71,11 @@ def executar_extracao():
 
     produtos = ler_produtos()
     print(f"extracao: produtos registros={len(produtos)}")
+
+    # se a extração veio vazia (ex.: API desligada), não sobrescreve os brutos anteriores
+    if not clientes or not pedidos:
+        print("erro: extração vazia; brutos anteriores mantidos")
+        return clientes, pedidos, produtos
 
     #6 - salvando os dados brutos, antes mesmo de fazer alguma transformação
     os.makedirs("brutos", exist_ok=True)

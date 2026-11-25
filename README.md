@@ -20,6 +20,9 @@ Escolhi o SQLite porque já vinha de brinde o python, não iria precisar montar 
 4. Rodar as consultas de validação:
    `sqlite3 -header -column verdejar.db < consultas_validacao.sql`
 
+> Os testes dependem do ETL ter rodado antes: o teste de reconciliação lê o `verdejar.db` e os dados de `brutos/`.
+> Se a API estiver desligada, o ETL mostra uma mensagem de erro e não executa a carga, para não apagar o banco.
+
 ## Estrutura
 - `etl/extracao.py`: extração paginada da API, tratamento de erros, leitura do CSV e dados brutos salvos em `brutos/`
 - `etl/transformacao.py`: uma função por armadilha (A1 a A6) e os contadores

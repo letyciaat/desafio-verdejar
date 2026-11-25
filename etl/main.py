@@ -7,6 +7,13 @@ import sqlite3
 # E - extração
 clientes, pedidos, produtos = executar_extracao()
 
+
+# Proteção em caso de: extração falhou (ex.: API desligada), não segue para a carga,
+# porque a estratégia "limpar e recarregar" apagaria o banco
+if not clientes or not pedidos:
+    print("erro: extração vazia (a API está ligada?); carga cancelada para não apagar o banco")
+    raise SystemExit(1)
+
 # T - transformação
 clientes_tratados = transformar_clientes(clientes)
 pedidos_tratados = transformar_pedidos(pedidos)
