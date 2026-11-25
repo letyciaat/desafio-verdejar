@@ -70,6 +70,40 @@ def transformar_clientes(clientes):
     print(f"transformacao: emails_nulos={emails_nulos} estados_padronizados={estados_padronizados}")
     return tratados
 
-with open("brutos/clientes.json", encoding="utf-8") as arquivo:
-    clientes = json.load(arquivo)
-clientes_tratados = transformar_clientes(clientes)
+
+# Juntando as transformações de pedidos (A5, A3, A4 e A6) e contando as ocorrências
+def transformar_pedidos(pedidos):
+    unicos = remover_repetidos(pedidos)
+    repetidos = len(pedidos) - len(unicos)
+    print(f"transformacao: pedidos_unicos={len(unicos)} repetidos_descartados={repetidos}")
+
+    tratados = []
+    datas_convertidas = 0
+    valores_convertidos = 0
+    divergentes = 0
+    for pedido in unicos:
+        novo = converter_data(pedido)
+        novo = tratar_valor_total(novo)
+        novo = calcular_divergencia(novo)
+        if novo["data_pedido"] != pedido["data_pedido"]:
+            datas_convertidas = datas_convertidas + 1
+        if isinstance(pedido["valor_total"], str):
+            valores_convertidos = valores_convertidos + 1
+        if novo["divergente"] == 1:
+            divergentes = divergentes + 1
+        tratados.append(novo)
+    print(f"transformacao: datas_convertidas={datas_convertidas} valores_convertidos={valores_convertidos}")
+    print(f"divergentes: {divergentes} pedidos com valor_total diferente da soma dos itens")
+    return tratados
+
+
+
+# só roda quando o arquivo é executado diretamente (não quando é importado pelos testes)
+if __name__ == "__main__":
+    with open("brutos/clientes.json", encoding="utf-8") as arquivo:
+        clientes = json.load(arquivo)
+    clientes_tratados = transformar_clientes(clientes)
+
+    with open("brutos/pedidos.json", encoding="utf-8") as arquivo:
+        pedidos = json.load(arquivo)
+    pedidos_tratados = transformar_pedidos(pedidos)
