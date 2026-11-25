@@ -60,23 +60,30 @@ def ler_produtos():
         linhas = list(leitor)
     return linhas
 
-# 5 - extraindo clientes, pedidos/produtos e mostrando a quantidade
-clientes, paginas_clientes = extrair("clientes")
-print(f"extracao: clientes paginas={paginas_clientes} registros={len(clientes)}")
+def executar_extracao():
 
-pedidos, paginas_pedidos = extrair("pedidos")
-print(f"extracao: pedidos paginas={paginas_pedidos} registros_brutos={len(pedidos)}")
+    # 5 - extraindo clientes, pedidos/produtos e mostrando a quantidade
+    clientes, paginas_clientes = extrair("clientes")
+    print(f"extracao: clientes paginas={paginas_clientes} registros={len(clientes)}")
 
-produtos = ler_produtos()
-print(f"extracao: produtos registros={len(produtos)}")
+    pedidos, paginas_pedidos = extrair("pedidos")
+    print(f"extracao: pedidos paginas={paginas_pedidos} registros_brutos={len(pedidos)}")
 
-#6 - salvando os dados brutos, antes mesmo de fazer alguma transformação
-os.makedirs("brutos", exist_ok=True)
+    produtos = ler_produtos()
+    print(f"extracao: produtos registros={len(produtos)}")
 
-with open("brutos/clientes.json", "w", encoding="utf-8") as arquivo:
-    json.dump(clientes, arquivo, ensure_ascii=False, indent=4)
+    #6 - salvando os dados brutos, antes mesmo de fazer alguma transformação
+    os.makedirs("brutos", exist_ok=True)
 
-with open("brutos/pedidos.json", "w", encoding="utf-8") as arquivo:
-    json.dump(pedidos, arquivo, ensure_ascii=False, indent=4)
+    with open("brutos/clientes.json", "w", encoding="utf-8") as arquivo:
+        json.dump(clientes, arquivo, ensure_ascii=False, indent=4)
 
-print("brutos: arquivos salvos em brutos")
+    with open("brutos/pedidos.json", "w", encoding="utf-8") as arquivo:
+        json.dump(pedidos, arquivo, ensure_ascii=False, indent=4)
+
+    print("brutos: arquivos salvos em brutos")
+    return clientes, pedidos, produtos
+
+
+if __name__ == "__main__":
+    executar_extracao()
